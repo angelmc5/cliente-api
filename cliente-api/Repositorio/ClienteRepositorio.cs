@@ -1,6 +1,7 @@
 ﻿using cliente_api.Data;
 using cliente_api.Modelos;
 using cliente_api.Repositorio.IRepositorio;
+using System.Linq.Expressions;
 
 namespace cliente_api.Repositorio
 {
@@ -13,44 +14,93 @@ namespace cliente_api.Repositorio
         }
         public bool CrearCliente(Cliente cliente)
         {
-            cliente.Nombre = cliente.Nombre.Trim().ToString();
-            _bdd.Cliente.Add(cliente);
-            return Guardar();
+            try
+            {
+                cliente.Nombre = cliente.Nombre.Trim().ToString();
+                _bdd.Cliente.Add(cliente);
+                return Guardar();
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
         public bool ActualizarCliente(Cliente cliente)
         {
-            _bdd.Cliente.Update(cliente);
+            try
+            {
+                _bdd.Cliente.Update(cliente);
             return Guardar();
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
         public bool BorrarCliente(Cliente cliente)
         {
-            _bdd.Cliente.Remove(cliente);
-            return Guardar();
+            try
+            {
+                _bdd.Cliente.Remove(cliente);
+                return Guardar();
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
        
 
         public bool ExisteCliente(string identificacion)
         {
-            bool valor = _bdd.Cliente.Any(c => c.Identificacion.ToLower().Trim() == identificacion.ToLower().Trim());
-            return valor;
+            try
+            {
+                bool valor = _bdd.Cliente.Any(c => c.Identificacion.ToLower().Trim() == identificacion.ToLower().Trim());
+                return valor;
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
         public bool ExisteCliente(int id)
         {
-            return _bdd.Cliente.Any(c => c.Id == id);
+            try
+            {
+                return _bdd.Cliente.Any(c => c.Id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
         public Cliente GetCliente(int id)
         {
-            return _bdd.Cliente.FirstOrDefault(c => c.Id == id);
+            try
+            {
+                return _bdd.Cliente.FirstOrDefault(c => c.Id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
         public ICollection<Cliente> GetClientes()
         {
-            return _bdd.Cliente.OrderBy(c => c.Identificacion).ToList();
+            try
+            {
+                return _bdd.Cliente.OrderBy(c => c.Identificacion).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");
+            }
         }
 
         public bool Guardar()
@@ -61,8 +111,7 @@ namespace cliente_api.Repositorio
             }
             catch (Exception ex)
             {
-                //guardar excepcion en logs
-                return false;    
+                throw new RepositoryException($"An error occurred while retrieving the entity: {ex.Message}");  
             }
             
         }
