@@ -30,12 +30,13 @@ namespace Clientes.UnitTest.API
             response.EnsureSuccessStatusCode();
 
             // Deserializa la respuesta a una lista de informes.
-            //var reports = JsonConvert.DeserializeObject<List<Report>>(await response.Content.ReadAsStringAsync());
-
-            // Aquí debes verificar que 'reportes' contiene los informes correctos.
+            var report = await response.Content.ReadAsStringAsync();
 
             // Assert
             Xunit.Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // Aquí debes verificar que 'reportes' contiene los información.
+            Xunit.Assert.True(report.Length > 0);
         }
     }
 }
